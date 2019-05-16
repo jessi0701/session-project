@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load bootstrap_pagination %}
+
+{% block body %}
+    <div class="d-flex justify-content-center "><p class='a'>영화 봐라</p></div>
+    <div class="d-flex justify-content-center align-items-center" style="margin-bottom: 50px;">
+        <form action="{% url 'movies:search' %}">
+            <input class='a' type='text' placeholder='검색어 입력' name='search_keyword'>
+            <button class='a'><i class="fas fa-search"></i>
+        </form></button>
+    </div>
+    
+
+
+    <div class="container ">
+        <div class="d-flex justify-content-center">
+            <div class="section">
+                <div class="section__item">
+
+                    <a href="/movies/classification/?genre=애니메이션" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label" name=><p>애니메이션</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=드라마" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>드라마</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=액션" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>액션</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=다큐멘터리" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>다큐멘터리</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=범죄" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>범죄</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=사극" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>사극</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=스릴러" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>스릴러</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=가족" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>가족</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=판타지" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>판타지</p></span>
+                    </a>
+                    <a href="/movies/classification/?genre=SF" class="sm-link sm-link_bg sm-link11">
+                        <span class="sm-link__label"><p>SF</p></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% if movies %}
+            <div class="mv_main">
+            <div class="row">
+                {% for movie in movies %}
+                    <div class="col-6 col-md-4 col-lg-3 my-2">
+                        <div class="card">
+                          <a class="effect" href="{% url 'movies:detail' movie.id %}"><img src="{{movie.poster_url}}" class="card-img-top" alt="..."></a>
+                          <div class="card-body d-flex justify-content-center">
+                            <p>{{movie.title}} <a class='bg-warning text-white' style='border-radius:5px';>{{movie.average}}</a></p>
+                          </div>
+                        </div>
+                        <!--<a href="{% url 'movies:detail' movie.id %}">-->
+                        <!--<img src="{{movie.poster_url}}" class="w-100">-->
+                        <!--</a>-->
+                    </div>
+                    <!--<h2>{{movie.title}}</h2>-->
+                {% endfor %}
+        </div>
+        <div class='d-flex justify-content-center'>
+            {% bootstrap_paginate movies %}
+        </div>
+        {% else %}
+                <p class='a d-flex justify-content-center'style="margin-top: 50px"; >검색결과가 없습니다 .</p>
+        {% endif %}
+        </div>
+    </div>
+    
+    
+{% endblock %}

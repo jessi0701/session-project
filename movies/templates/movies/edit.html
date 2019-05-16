@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block body %}
+<form action='' method="POST">
+    {% csrf_token %}
+    {{score_form}}
+    <input type="number" name="value" min=0 max=5>
+    <input type="submit" value="완료"/>
+</form>
+
+{% endblock %}

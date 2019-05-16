@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&amp;subset=korean" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <style>
+        body{
+            background: #7F7FD5;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to bottom, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to bottom, #91EAE4, #86A8E7, #7F7FD5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
+             
+        }
+        .effect{
+            display: inline-block;
+            position: relative;
+            overflow: hidden; /* 불필요한 부분 가리기 */
+            padding: 6px; /* 6px정도 이미지 밖으로 표현 */
+        }
+        p{
+            font-family: 'Do Hyeon', sans-serif;
+            font-size: 20px;
+        }
+        p.a {
+            font-size: 50px;
+        }
+        div.a{
+            height: 40px;
+            width: 400px;
+            border: 1px solid #22B600;
+            background : #ffffff;
+        }
+        input.a{
+            font-size:16px;
+            width: 325px;
+            padding: 10px;
+            border: 0px;
+            outline: none;
+            float: left;
+        }
+        button.a{
+            width: 75px;
+            height: 44px;
+            border: 0px;
+            background: #22B600;
+            outline: none;
+            float: right;
+            color: #ffffff;
+        }
+        nav{
+
+            background: #ECE9E6;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to bottom, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to bottom, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            opacity: 0.8;
+        
+        }
+        rect{
+            opacity:0;
+        }
+    </style>
+    
+</head>
+
+
+    
+
+
+
+
+<body>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <nav class="navbar navbar-light bg-black sticky-top">
+        <span class="navbar-brand mb-0 "><p><a href="{% url 'movies:list' %}" style="color: black"><i class="fas fa-film"></i></a></p></span>
+        {% if user.is_authenticated %}
+        <div class="d-flex justify-content-end align-items-center">
+            <p>{{ user.username }}님 환영합니다!</p>
+            <p><a class="nav-link " href="{% url 'accounts:detail' user.id %}"style="color: black" ><i class="fas fa-user"></i></a></p>
+            <p><a class="nav-link" href="{% url 'accounts:logout' %}" style="color: black"><i class="fas fa-sign-out-alt"></i></a></p>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-end">
+            <p><a class="nav-link" href="{% url 'accounts:signup' %}" style="color: black"><i class="fas fa-user-plus"></i></a></p>
+            <p><a class="nav-link" href="{% url 'accounts:login' %}" style="color: black"><i class="fas fa-sign-in-alt"></i></a></p>
+        </div>
+        {% endif %}
+       
+    </nav>
+    
+    <hr> 
+    {% if my_dict %}
+        <div class="d-flex justify-content-center "><p class='a'>{{user_info.username}} 님의 성향 파악!</p></div>
+        <input type="hidden" value="{{my_dict}}" id="user-tendency"/>
+        <div class="d-flex justify-content-center" id="chart_div"></div>
+        <div class="d-flex justify-content-center">
+            <p class="a">{{favorite_genre}} 장르 영화 추천 !  <a href="{% url 'accounts:detail' user.id %}"><i class="fas fa-sync-alt"></i></a></p>
+        </div>
+        <div class="container">
+            <div class="row">
+                {% for movie in recommend_movie %}
+                    <div class="col-sm-4">
+                        <a class="effect" href="{% url 'movies:detail' movie.id %}" ><img src="{{movie.poster_url}}" width="200" height="300"></img></a>
+                    </div>
+                {% endfor %}
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br>
+        </div>
+    {% else %}
+        <br><br><br><br>
+        <div class="d-flex justify-content-center"><p class="a">추천한 영화가 없습니다 !</p></div>
+    {% endif %}
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      const userTendency = JSON.parse(document.querySelector("#user-tendency").value)
+      function drawChart() {
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        
+        const result = []
+        
+        for (var key in userTendency) {
+        //   console.log(key, userTendency[key]);
+          result.push([key,userTendency[key]])
+        }
+        
+        
+        data.addRows(result);
+
+        // Set chart options
+        var options = {
+                       'width':1200,
+                       'height':600,
+                        animation:{
+                            duration: 1000,
+                              easing: 'out',
+                              startup: true
+                          }
+        }
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+
+      }
+      
+    </script>
+</body>
+</html>

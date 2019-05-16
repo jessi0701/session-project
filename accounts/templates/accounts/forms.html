@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block body %}
+<div class="container">
+    <div class="col-6 offset-3">
+        {% if request.resolver_match.url_name == "login" %}
+        <h1 class="text-center">로그인 페이지</h1>
+        {% else %}
+        <h1 class="text-center">회원가입 페이지</h1>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <input type="submit" value="완료">
+        </form>
+    </div>
+</div>
+{% endblock %}

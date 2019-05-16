@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container" stlye="margin-top:50px">
+        <div class="row">
+            <div class="col-8">
+                <p class='a'>{{movie.title}}  <a class='bg-warning text-white' style="border-radius: 10px;">{{movie.average}}</a></p>
+                <p>{{movie.audience}}</p>
+                <p>{{movie.description}}</p>
+                <p>{{movie.genre}} | {{movie.audits}}</p>
+                <p>배우 : {{movie.actors}}
+                
+                </p>
+                <p>개봉일 : {{movie.date}}</p>
+                <div>
+                    {% if user.is_authenticated %}
+                        {% if user in movie.like_users.all %}
+                            <p><a href="{% url 'movies:like' movie.id %}">좋아요 취소</a> {{ movie.like_users.count }}개</p>
+                        {% else %}
+                            <p><a href="{% url 'movies:like' movie.id %}">좋아요</a> {{ movie.like_users.count }}개</p>
+                        {% endif %}
+                    {% else %}
+                        <p>좋아요{{ movie.like_users.count }}개 </p>
+                    
+                    {% endif %}
+                    
+                </div>
+                
+            </div>
+            <div class="col-4 ">
+                <img src="{{movie.poster_url}}" style="width:300px">
+                
+            </div>
+            
+        </div>
+        
+    
+    
+    {% if user.is_authenticated %}
+    
+    <form action="{% url 'movies:score_create' movie.id %}" method='post'>
+        {% csrf_token %}
+        {{score_form}}
+        <input type="number" name="value" min=0 max=5>
+        <input type="submit" value="작성"/>
+    </form>
+    
+    {% endif %}
+    {% for score in movie.score_set.all %}
+        {% if score.value == 0 %}
+            <p><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i> <b>{{score.value}}</b> | <b>{{score.user}}</b>  {{score.content}}</p>
+        {% elif score.value == 1 %}
+            <p><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i> <b>{{score.value}}</b> | <b>{{score.user}}</b>  {{score.content}}</p>
+        {% elif score.value == 2 %}
+            <p><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i> <b>{{score.value}}</b> | <b>{{score.user}}</b>  {{score.content}}</p>
+        {% elif score.value == 3 %}
+            <p><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#C0C0C0"></i><i class="fas fa-star" style="color:#C0C0C0"></i> <b>{{score.value}}</b> | <b>{{score.user}}</b>  {{score.content}}</p>
+        {% elif score.value == 4 %}
+            <p><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#C0C0C0"></i> <b>{{score.value}}</b> | <b>{{score.user}}</b>  {{score.content}}</p>
+        {% elif score.value == 5 %}
+            <p><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i><i class="fas fa-star" style="color:#ed4956"></i> <b>{{score.value}}</b> | <b>{{score.user}}</b>  {{score.content}}</p>                        
+        {% endif %}
+        <p>
+            {% if request.user == score.user %}
+                <a href="{% url 'movies:score_delete' movie.id score.id %}">삭제</a>
+                <a href="{% url 'movies:score_edit' movie.id score.id %}">수정</a>
+        
+            {% endif %}
+            <hr>
+        </p>
+    {% endfor %}
+    </div>
+    <br><br><br><br><br><br>
+{% endblock %}
